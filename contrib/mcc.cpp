@@ -267,6 +267,11 @@ void MccRectVector_Close(MccRectVector mv)
     delete mv;
 }
 
+void MccCChecker_Close(MccCChecker mc)
+{
+    delete mc;
+}
+
 MccDetectorParameters MccDetectorParameters_Create()
 {
     try

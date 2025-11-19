@@ -82,6 +82,7 @@ float MccCChecker_GetCost(MccCChecker mc);
 void MccCChecker_SetCenter(MccCChecker mc, Point2f pt);
 Point2f MccCChecker_GetCenter(MccCChecker mc);
 Points2f MccCChecker_GetColorCharts(MccCChecker mc);
+void MccCChecker_Close(MccCChecker mc);
 
 
 MccCCheckerDraw MccCCheckerDraw_Create(MccCChecker mc, double b, double g, double r, double a, int thickness);
