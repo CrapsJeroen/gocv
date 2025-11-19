@@ -128,6 +128,12 @@ func (mc *MccCChecker) GetTarget() TYPECHART {
 	return TYPECHART(C.MccCChecker_GetTarget(mc.p))
 }
 
+func (mc *MccCChecker) Close() error {
+	C.MccCChecker_Close(mc.p)
+	mc.p = nil
+	return nil
+}
+
 func (mc *MccCChecker) SetBox(box []gocv.Point2f) {
 	n := len(box)
 	if n == 0 {
@@ -199,6 +205,7 @@ func (mc *MccCChecker) GetCenter() gocv.Point2f {
 // and in ChartsRGB calculation.
 func (mc *MccCChecker) GetColorCharts() []gocv.Point2f {
 	res := C.MccCChecker_GetColorCharts(mc.p)
+	defer C.Points2f_Close(res)
 	n := int(res.length)
 	if n == 0 || res.points == nil {
 		return nil
