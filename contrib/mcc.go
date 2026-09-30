@@ -153,7 +153,7 @@ func (mc *MccCChecker) GetBox() []gocv.Point2f {
 	if n == 0 || res.points == nil {
 		return nil
 	}
-	pts := (*[1 << 28]C.Point2f)(unsafe.Pointer(res.points))[:n:n]
+	pts := unsafe.Slice((*C.Point2f)(unsafe.Pointer(res.points)), n)
 	out := make([]gocv.Point2f, n)
 	for i := 0; i < n; i++ {
 		out[i] = gocv.Point2f{X: float32(pts[i].x), Y: float32(pts[i].y)}
@@ -210,7 +210,7 @@ func (mc *MccCChecker) GetColorCharts() []gocv.Point2f {
 	if n == 0 || res.points == nil {
 		return nil
 	}
-	pts := (*[1 << 28]C.Point2f)(unsafe.Pointer(res.points))[:n:n]
+	pts := unsafe.Slice((*C.Point2f)(unsafe.Pointer(res.points)), n)
 	out := make([]gocv.Point2f, n)
 	for i := 0; i < n; i++ {
 		out[i] = gocv.Point2f{X: float32(pts[i].x), Y: float32(pts[i].y)}
