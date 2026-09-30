@@ -10,13 +10,15 @@ jobs:
   build:
     strategy:
         matrix:
-          os: [macos-14, macos-15]
+          os: [macos-15, macos-26]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install OpenCV
+        # Homebrew's opencv formula is OpenCV 5; opencv@4 is keg-only.
         run: |
           brew update
-          brew install opencv
+          brew install opencv@4
+          echo "PKG_CONFIG_PATH=$(brew --prefix opencv@4)/lib/pkgconfig:${PKG_CONFIG_PATH}" >> "$GITHUB_ENV"
       - name: Install Go
         uses: actions/setup-go@v6
         with:
