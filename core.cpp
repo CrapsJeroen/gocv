@@ -168,6 +168,10 @@ Mat Mat_Row(Mat m, int r) {
     return new cv::Mat(m->row(r));
 }
 
+Mat Mat_Copy(Mat m) {
+    return new cv::Mat(*m);
+}
+
 // Mat_Clone returns a clone of this Mat
 Mat Mat_Clone(Mat m) {
     return new cv::Mat(m->clone());
@@ -376,6 +380,16 @@ int8_t Mat_GetSChar(Mat m, int row, int col) {
 
 int8_t Mat_GetSChar3(Mat m, int x, int y, int z) {
     return m->at<schar>(x, y, z);
+}
+
+// Mat_GetUShort returns a specific row/col value from this Mat expecting
+// each element to contain a ushort aka CV_16U.
+uint16_t Mat_GetUShort(Mat m, int row, int col) {
+    return m->at<ushort>(row, col);
+}
+
+uint16_t Mat_GetUShort3(Mat m, int x, int y, int z) {
+    return m->at<ushort>(x, y, z);
 }
 
 // Mat_GetShort returns a specific row/col value from this Mat expecting

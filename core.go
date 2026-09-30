@@ -437,6 +437,17 @@ func (m *Mat) Row(row int) Mat {
 	return newMat(C.Mat_Row(m.p, C.int(row)))
 }
 
+// Copy returns a shallow copy of the Mat. No data is copied.
+//
+// For further details, please see:
+// https://docs.opencv.org/4.x/d3/d63/classcv_1_1Mat.html#a294eaf8a95d2f9c7be19ff594d06278e
+func (m *Mat) Copy() Mat {
+	return Mat{
+		p: C.Mat_Copy(m.p),
+		d: m.d,
+	}
+}
+
 // Clone returns a cloned full copy of the Mat.
 func (m *Mat) Clone() Mat {
 	return newMat(C.Mat_Clone(m.p))
@@ -789,6 +800,18 @@ func (m *Mat) GetSCharAt(row int, col int) int8 {
 // in this Mat expecting it to be of type schar aka CV_8S.
 func (m *Mat) GetSCharAt3(x, y, z int) int8 {
 	return int8(C.Mat_GetSChar3(m.p, C.int(x), C.int(y), C.int(z)))
+}
+
+// GetUShortAt returns a value from a specific row/col
+// in this Mat expecting it to be of type ushort aka CV_16U.
+func (m *Mat) GetUShortAt(row int, col int) uint16 {
+	return uint16(C.Mat_GetUShort(m.p, C.int(row), C.int(col)))
+}
+
+// GetUShortAt3 returns a value from a specific x, y, z coordinate location
+// in this Mat expecting it to be of type ushort aka CV_16U.
+func (m *Mat) GetUShortAt3(x, y, z int) uint16 {
+	return uint16(C.Mat_GetUShort3(m.p, C.int(x), C.int(y), C.int(z)))
 }
 
 // GetShortAt returns a value from a specific row/col
@@ -2180,15 +2203,9 @@ func NewPointVectorFromPoints(pts []image.Point) PointVector {
 	p := (*C.struct_Point)(C.malloc(C.size_t(C.sizeof_struct_Point * len(pts))))
 	defer C.free(unsafe.Pointer(p))
 
-	h := &reflect.SliceHeader{
-		Data: uintptr(unsafe.Pointer(p)),
-		Len:  len(pts),
-		Cap:  len(pts),
-	}
-	pa := *(*[]C.Point)(unsafe.Pointer(h))
-
+	h := unsafe.Slice(p, len(pts))
 	for j, point := range pts {
-		pa[j] = C.struct_Point{
+		h[j] = C.struct_Point{
 			x: C.int(point.X),
 			y: C.int(point.Y),
 		}
